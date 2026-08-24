@@ -1,1 +1,553 @@
-file:///Users/lukehwang/Documents/Codex/2026-08-24/i-a/outputs/index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ithaca Aerial Robotics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F7F8;
+    --panel:#FFFFFF;
+    --ink:#16232E;
+    --ink-soft:#57666F;
+    --blue:#2C5A78;
+    --blue-deep:#152C3C;
+    --blue-mid:#3E6E8E;
+    --steel:#93A2AC;
+    --steel-light:#DCE3E7;
+    --amber:#D9903E;
+    --line:rgba(22,35,46,0.12);
+    --display:'Archivo', sans-serif;
+    --body:'Inter', sans-serif;
+    --script:'Caveat', cursive;
+    --mono:'IBM Plex Mono', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.65;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 28px;}
+  svg{display:block;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(245,247,248,0.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:16.5px;letter-spacing:0.01em;}
+  .brand .mark{width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid var(--ink);flex-shrink:0;position:relative;}
+  .brand .mark .sky{position:absolute;top:0;left:0;right:0;height:50%;background:var(--blue);}
+  .brand .mark .ground{position:absolute;bottom:0;left:0;right:0;height:50%;background:var(--steel-light);}
+  nav{display:flex;gap:28px;align-items:center;}
+  nav a.navlink{font-size:14px;font-weight:600;color:var(--ink-soft);transition:color .15s ease;}
+  nav a.navlink:hover, nav a.navlink:focus-visible{color:var(--ink);outline:none;}
+  .navtoggle{display:none;background:none;border:1px solid var(--ink);width:38px;height:38px;border-radius:4px;font-size:18px;cursor:pointer;}
+
+  /* hero — full illustrated scene, asymmetric */
+  .hero{position:relative;min-height:560px;display:flex;align-items:flex-end;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;z-index:0;}
+  .hero-bg svg{width:100%;height:100%;}
+  .grain{position:absolute;inset:0;opacity:0.05;mix-blend-mode:overlay;pointer-events:none;}
+  .hero-content{position:relative;z-index:2;padding:0 0 56px;width:100%;}
+  .hero-content .wrap{display:block;max-width:640px;margin-left:28px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#BFD4E2;margin-bottom:16px;}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,5vw,54px);line-height:1.06;letter-spacing:-0.01em;color:#fff;}
+  .hero p.lede{margin:18px 0 28px;font-size:16.5px;color:#D9E4EA;max-width:44ch;}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{font-family:var(--body);font-weight:700;font-size:14.5px;padding:14px 24px;border-radius:4px;display:inline-block;border:1.5px solid transparent;transition:transform .12s ease, background .15s ease, color .15s ease;}
+  .btn:active{transform:scale(0.98);}
+  .btn-fill{background:#fff;color:var(--blue-deep);}
+  .btn-fill:hover{background:var(--amber);color:#fff;}
+  .btn-outline{background:transparent;color:#fff;border-color:rgba(255,255,255,0.55);}
+  .btn-outline:hover{background:rgba(255,255,255,0.12);border-color:#fff;}
+  .btn:focus-visible{outline:3px solid var(--amber);outline-offset:2px;}
+
+  section{padding:80px 0;}
+  .section-head{max-width:620px;margin-bottom:44px;}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;}
+  h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,3.2vw,36px);letter-spacing:-0.005em;}
+  .section-head p{color:var(--ink-soft);margin-top:12px;font-size:16px;max-width:56ch;}
+
+  .stats{background:var(--blue-deep);color:#fff;}
+  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+  .stat{padding:28px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.14);}
+  .stat:last-child{border-right:none;}
+  .stat .num{font-family:var(--display);font-weight:800;font-size:24px;}
+  .stat .lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#AFC0CC;margin-top:6px;}
+
+  /* subteams with vignette illustration */
+  .subteams{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .subteam{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .subteam .vignette{height:120px;background:var(--steel-light);}
+  .subteam .vignette svg{width:100%;height:100%;}
+  .subteam .body{padding:22px 22px 26px;}
+  .subteam .n{font-family:var(--mono);font-size:12px;color:var(--steel);margin-bottom:10px;}
+  .subteam h3{font-family:var(--display);font-weight:700;font-size:18px;margin-bottom:8px;}
+  .subteam p{font-size:14px;color:var(--ink-soft);}
+
+  .quote-strip{background:var(--steel-light);}
+  .quote-strip .wrap{display:flex;align-items:center;gap:24px;}
+  .quote-strip svg{width:52px;height:52px;flex-shrink:0;}
+  .quote-strip p{font-family:var(--script);font-size:24px;color:var(--blue-deep);line-height:1.35;}
+  .quote-strip span{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:6px;text-transform:uppercase;letter-spacing:0.05em;}
+
+  /* builds with illustrated vehicle icon, asymmetric sizing */
+  .builds-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:22px;}
+  .build{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .build .art{height:150px;background:linear-gradient(180deg,#EAF0F3,var(--steel-light));display:flex;align-items:center;justify-content:center;}
+  .build .art svg{width:70%;height:70%;}
+  .build .body{padding:22px 24px 24px;}
+  .pill{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:0.05em;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:14px;}
+  .pill.flying{background:#E3EEE7;color:#2E7D4F;}
+  .pill.testing{background:#F2E4D0;color:var(--amber);}
+  .pill.design{background:#E1E9EF;color:var(--blue);}
+  .build h3{font-family:var(--display);font-weight:700;font-size:19px;margin-bottom:12px;}
+  .build ul{list-style:none;font-size:13px;margin-bottom:12px;}
+  .build ul li{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line);font-family:var(--mono);color:var(--ink-soft);}
+  .build ul li span:last-child{color:var(--ink);}
+  .build p.blurb{font-size:13.5px;color:var(--ink-soft);}
+
+  .horizon-note{margin-top:32px;border-left:3px solid var(--blue);padding:14px 20px;font-size:14.5px;color:var(--ink-soft);background:var(--panel);}
+  .horizon-note strong{color:var(--ink);}
+
+  /* photo-strip gallery — scattered snapshot illustrations */
+  .gallery{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .snapshots{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;padding-top:10px;}
+  .snap{width:190px;background:#fff;padding:10px 10px 18px;box-shadow:0 6px 16px rgba(22,35,46,0.12);}
+  .snap:nth-child(1){transform:rotate(-3deg);}
+  .snap:nth-child(2){transform:rotate(2deg);margin-top:18px;}
+  .snap:nth-child(3){transform:rotate(-1.5deg);}
+  .snap:nth-child(4){transform:rotate(2.5deg);margin-top:10px;}
+  .snap:hover{transform:rotate(0deg);transition:transform .18s ease;}
+  .snap .frame{width:100%;aspect-ratio:4/3;background:var(--steel-light);overflow:hidden;}
+  .snap .frame svg{width:100%;height:100%;}
+  .snap figcaption{font-family:var(--script);font-size:18px;color:var(--ink-soft);text-align:center;margin-top:10px;}
+
+  /* team roster */
+  .roster{border-top:1px solid var(--line);}
+  .row{display:grid;grid-template-columns:56px 1fr 160px;gap:18px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line);}
+  .row .avatar{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:14px;}
+  .row h4{font-size:16px;font-weight:600;}
+  .row .role{font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.04em;text-align:right;}
+
+  /* join — diagonal color block for asymmetry */
+  .join{position:relative;background:var(--blue-deep);color:#fff;clip-path:polygon(0 4%, 100% 0, 100% 96%, 0 100%);margin:20px 0;}
+  .join .wrap{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;padding:90px 28px;}
+  .join p{color:#C9D8E1;margin:16px 0 26px;max-width:44ch;}
+  .join .kicker{color:var(--amber);}
+  .infocard{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:26px;font-family:var(--mono);font-size:13.5px;}
+  .infocard div{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.14);}
+  .infocard div:last-child{border-bottom:none;}
+  .infocard .k{color:#9FB4C0;text-transform:uppercase;letter-spacing:0.05em;font-size:11px;}
+  .join .btn-fill{background:#fff;color:var(--blue-deep);}
+  .join .btn-fill:hover{background:var(--amber);color:#fff;}
+
+  footer{background:var(--ink);color:#9AA7AF;}
+  .footgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding:48px 0 26px;}
+  .footgrid h5{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#6C7A82;margin-bottom:14px;}
+  .footgrid a, .footgrid p{display:block;font-size:14px;margin-bottom:8px;color:#B7C1C7;}
+  .footgrid a:hover{color:#fff;}
+  .footbottom{border-top:1px solid rgba(255,255,255,0.1);padding:18px 0;font-size:12.5px;color:#6C7A82;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  @media (max-width:880px){
+    .hero-content .wrap{margin-left:0;max-width:100%;}
+    .stats .wrap{grid-template-columns:repeat(2,1fr);}
+    .stat{border-bottom:1px solid rgba(255,255,255,0.14);}
+    .subteams{grid-template-columns:1fr;}
+    .builds-grid{grid-template-columns:1fr;}
+    .quote-strip .wrap{flex-direction:column;text-align:center;}
+    .join{clip-path:none;}
+    .join .wrap{grid-template-columns:1fr;padding:56px 24px;}
+    .footgrid{grid-template-columns:1fr;gap:24px;}
+    .row{grid-template-columns:44px 1fr;}
+    .row .role{grid-column:2;text-align:left;margin-top:2px;}
+    nav{display:none;position:absolute;top:68px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);flex-direction:column;padding:10px 28px;gap:14px;}
+    nav.open{display:flex;}
+    .navtoggle{display:block;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="#top" class="brand"><span class="mark"><span class="sky"></span><span class="ground"></span></span>Ithaca Aerial</a>
+    <nav id="mainnav">
+      <a class="navlink" href="#subteams">Subteams</a>
+      <a class="navlink" href="#builds">Builds</a>
+      <a class="navlink" href="#team">Team</a>
+      <a class="navlink" href="#join">Join</a>
+    </nav>
+    <button class="navtoggle" id="navtoggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true">
+    <svg viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0F2230"/>
+          <stop offset="1" stop-color="#3E6E8E"/>
+        </linearGradient>
+        <filter id="grainF"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter>
+      </defs>
+      <rect width="1400" height="700" fill="url(#sky)"/>
+      <circle cx="1230" cy="120" r="70" fill="#D9903E" opacity="0.85"/>
+      <g opacity="0.5" fill="none" stroke="#EAF0F3" stroke-width="4" stroke-linecap="round">
+        <path d="M120 90 l16 -10 l16 10"/>
+        <path d="M300 150 l14 -9 l14 9"/>
+        <path d="M980 70 l14 -9 l14 9"/>
+      </g>
+      <path d="M0 560 L120 500 L260 545 L420 470 L600 530 L760 480 L950 540 L1120 490 L1280 530 L1400 500 L1400 700 L0 700 Z" fill="#152C3C"/>
+      <rect x="640" y="400" width="90" height="140" fill="#1B3648"/>
+      <rect x="655" y="420" width="18" height="18" fill="#3E6E8E"/>
+      <rect x="685" y="420" width="18" height="18" fill="#3E6E8E"/>
+      <rect x="655" y="450" width="18" height="18" fill="#3E6E8E"/>
+      <rect x="685" y="450" width="18" height="18" fill="#3E6E8E"/>
+      <polygon points="635,400 685,365 735,400" fill="#0F2230"/>
+      <g transform="translate(430,260)">
+        <g stroke="#EAF0F3" stroke-width="5" stroke-linecap="round">
+          <line x1="0" y1="0" x2="-46" y2="-34"/>
+          <line x1="0" y1="0" x2="46" y2="-34"/>
+          <line x1="0" y1="0" x2="-46" y2="34"/>
+          <line x1="0" y1="0" x2="46" y2="34"/>
+        </g>
+        <g fill="none" stroke="#EAF0F3" stroke-width="4">
+          <circle cx="-46" cy="-34" r="15"/>
+          <circle cx="46" cy="-34" r="15"/>
+          <circle cx="-46" cy="34" r="15"/>
+          <circle cx="46" cy="34" r="15"/>
+        </g>
+        <rect x="-13" y="-13" width="26" height="26" rx="3" fill="#D9903E"/>
+        <g opacity="0.5" stroke="#EAF0F3" stroke-width="2">
+          <line x1="-90" y1="-34" x2="-64" y2="-34"/>
+          <line x1="90" y1="-34" x2="64" y2="-34"/>
+        </g>
+      </g>
+      <rect width="1400" height="700" filter="url(#grainF)" opacity="0.04"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="wrap">
+      <div class="eyebrow">Ithaca High School · Student-run</div>
+      <h1>We build things. Then we make them fly.</h1>
+      <p class="lede">Quadcopters, FPV racers, fixed-wing planes — if it's got a motor and a chance of crashing, someone here is probably building it. No experience needed, just curiosity.</p>
+      <div class="cta-row">
+        <a href="#join" class="btn btn-fill">Come to a meeting</a>
+        <a href="#builds" class="btn btn-outline">See what we're building</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stat"><div class="num">Est. 2025</div><div class="lbl">Founded</div></div>
+    <div class="stat"><div class="num">3</div><div class="lbl">Active builds</div></div>
+    <div class="stat"><div class="num">3</div><div class="lbl">Team leads</div></div>
+    <div class="stat"><div class="num">Mr. Daugherty</div><div class="lbl">Faculty advisor</div></div>
+  </div>
+</section>
+
+<section id="subteams">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">// How the club is organized</div>
+      <h2>Three ways to get involved</h2>
+      <p>Every build needs all three — most members end up trying each of them by second semester.</p>
+    </div>
+    <div class="subteams">
+      <div class="subteam">
+        <div class="vignette">
+          <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="150" fill="#DCE3E7"/>
+            <rect x="40" y="50" width="120" height="14" rx="4" fill="#93A2AC"/>
+            <circle cx="60" cy="57" r="9" fill="#57666F"/>
+            <line x1="160" y1="30" x2="220" y2="110" stroke="#16232E" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="222" cy="114" r="7" fill="#D9903E"/>
+            <circle cx="100" cy="95" r="18" fill="none" stroke="#2C5A78" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="body">
+          <div class="n">01</div>
+          <h3>Airframe</h3>
+          <p>CAD, 3D-printed mounts, frame assembly, and repairs. Hands-on work with real tools from day one.</p>
+        </div>
+      </div>
+      <div class="subteam">
+        <div class="vignette">
+          <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="150" fill="#DCE3E7"/>
+            <rect x="70" y="35" width="160" height="90" rx="6" fill="#152C3C"/>
+            <g fill="#3E6E8E">
+              <circle cx="100" cy="60" r="5"/><circle cx="120" cy="60" r="5"/><circle cx="140" cy="60" r="5"/>
+              <circle cx="100" cy="80" r="5"/><circle cx="140" cy="80" r="5"/>
+              <circle cx="180" cy="70" r="10"/>
+            </g>
+            <path d="M100 100 h100" stroke="#D9903E" stroke-width="3"/>
+            <text x="150" y="115" text-anchor="middle" font-family="IBM Plex Mono" font-size="14" fill="#EAF0F3">&lt;/&gt;</text>
+          </svg>
+        </div>
+        <div class="body">
+          <div class="n">02</div>
+          <h3>Electronics &amp; software</h3>
+          <p>Wiring, flight controller setup, and the code behind autonomous missions. Python and a bit of C++.</p>
+        </div>
+      </div>
+      <div class="subteam">
+        <div class="vignette">
+          <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="150" fill="#DCE3E7"/>
+            <rect x="60" y="30" width="70" height="95" rx="4" fill="#fff" stroke="#16232E" stroke-width="3"/>
+            <rect x="80" y="24" width="30" height="12" rx="3" fill="#93A2AC"/>
+            <line x1="72" y1="55" x2="118" y2="55" stroke="#2E7D4F" stroke-width="3"/>
+            <line x1="72" y1="70" x2="110" y2="70" stroke="#93A2AC" stroke-width="3"/>
+            <path d="M75 45 l6 6 l10 -12" stroke="#2E7D4F" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <g transform="translate(200,80)">
+              <line x1="0" y1="0" x2="-24" y2="-18" stroke="#16232E" stroke-width="4" stroke-linecap="round"/>
+              <line x1="0" y1="0" x2="24" y2="-18" stroke="#16232E" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="-24" cy="-18" r="8" fill="none" stroke="#16232E" stroke-width="3"/>
+              <circle cx="24" cy="-18" r="8" fill="none" stroke="#16232E" stroke-width="3"/>
+            </g>
+          </svg>
+        </div>
+        <div class="body">
+          <div class="n">03</div>
+          <h3>Test &amp; ops</h3>
+          <p>Flight testing, safety checks, and getting a build competition-ready. You keep the team honest about what's airworthy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quote-strip">
+  <div class="wrap">
+    <svg viewBox="0 0 48 48" fill="none"><path d="M6 30c0-10 6-16 14-18l2 4c-6 2-9 6-9 11h9v14H6V30z" fill="#2C5A78"/><path d="M26 30c0-10 6-16 14-18l2 4c-6 2-9 6-9 11h9v14H26V30z" fill="#2C5A78"/></svg>
+    <div>
+      <p>"I couldn't solder in September. By December I'd built half a flight controller wiring harness myself."</p>
+      <span>— a sophomore member</span>
+    </div>
+  </div>
+</section>
+
+<section id="builds">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">// On the bench right now</div>
+      <h2>Current builds</h2>
+      <p>Three airframes in rotation this semester, each at a different stage.</p>
+    </div>
+    <div class="builds-grid">
+      <div class="build">
+        <div class="art">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="#2C5A78" stroke-width="7" stroke-linecap="round">
+              <line x1="100" y1="100" x2="40" y2="40"/><line x1="100" y1="100" x2="160" y2="40"/>
+              <line x1="100" y1="100" x2="40" y2="160"/><line x1="100" y1="100" x2="160" y2="160"/>
+            </g>
+            <g fill="none" stroke="#152C3C" stroke-width="6">
+              <circle cx="40" cy="40" r="24"/><circle cx="160" cy="40" r="24"/>
+              <circle cx="40" cy="160" r="24"/><circle cx="160" cy="160" r="24"/>
+            </g>
+            <rect x="82" y="82" width="36" height="36" rx="5" fill="#16232E"/>
+            <rect x="90" y="95" width="20" height="12" fill="#D9903E"/>
+          </svg>
+        </div>
+        <div class="body">
+          <span class="pill flying">Flying</span>
+          <h3>Survey quad</h3>
+          <ul>
+            <li><span>Frame</span><span>420mm quad</span></li>
+            <li><span>Payload</span><span>Multispectral cam</span></li>
+            <li><span>Flight time</span><span>~22 min</span></li>
+          </ul>
+          <p class="blurb">Autonomous grid-survey platform, originally built to support a member's independent research project.</p>
+        </div>
+      </div>
+      <div class="build">
+        <div class="art">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="#D9903E" stroke-width="6" stroke-linecap="round">
+              <line x1="100" y1="110" x2="55" y2="60"/><line x1="100" y1="110" x2="145" y2="60"/>
+              <line x1="100" y1="110" x2="55" y2="160"/><line x1="100" y1="110" x2="145" y2="160"/>
+            </g>
+            <g fill="none" stroke="#16232E" stroke-width="5">
+              <circle cx="55" cy="60" r="18"/><circle cx="145" cy="60" r="18"/>
+              <circle cx="55" cy="160" r="18"/><circle cx="145" cy="160" r="18"/>
+            </g>
+            <rect x="88" y="98" width="24" height="24" rx="4" fill="#16232E"/>
+            <path d="M20 175 L60 155 M25 185 L70 162" stroke="#93A2AC" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="body">
+          <span class="pill testing">Testing</span>
+          <h3>FPV racer</h3>
+          <ul>
+            <li><span>Frame</span><span>5-inch racer</span></li>
+            <li><span>Motors</span><span>2306 / 1900kv</span></li>
+            <li><span>Top speed</span><span>~78 mph</span></li>
+          </ul>
+          <p class="blurb">Tuning PID rates this month after a hard landing took out a motor mount.</p>
+        </div>
+      </div>
+      <div class="build">
+        <div class="art">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 110 Q100 70 180 110 Q100 130 20 110 Z" fill="#3E6E8E" stroke="#16232E" stroke-width="4"/>
+            <rect x="92" y="100" width="16" height="40" fill="#16232E"/>
+            <path d="M92 140 l-14 24 M108 140 l14 24" stroke="#16232E" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="body">
+          <span class="pill design">Design</span>
+          <h3>Fixed-wing, long-range</h3>
+          <ul>
+            <li><span>Frame</span><span>1.5m flying wing</span></li>
+            <li><span>Target range</span><span>15+ km</span></li>
+            <li><span>Status</span><span>CAD phase</span></li>
+          </ul>
+          <p class="blurb">A long-endurance airframe we're prototyping ahead of next year's goals.</p>
+        </div>
+      </div>
+    </div>
+    <div class="horizon-note"><strong>On the horizon:</strong> we're working toward fielding a team for a national UAS competition in 2027 — nothing official yet, but it's shaping a lot of what we're building this year.</div>
+  </div>
+</section>
+
+<section class="gallery">
+  <div class="wrap">
+    <div class="section-head" style="margin-bottom:8px;">
+      <div class="kicker">// From build nights</div>
+      <h2>A few snapshots</h2>
+    </div>
+    <div class="snapshots">
+      <figure class="snap">
+        <div class="frame">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="150" fill="#EAF0F3"/>
+            <rect x="30" y="60" width="90" height="16" rx="4" fill="#93A2AC"/>
+            <line x1="130" y1="50" x2="170" y2="95" stroke="#16232E" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="172" cy="98" r="7" fill="#D9903E"/>
+            <circle cx="70" cy="100" r="14" fill="none" stroke="#2C5A78" stroke-width="4"/>
+          </svg>
+        </div>
+        <figcaption>Late-night solder session</figcaption>
+      </figure>
+      <figure class="snap">
+        <div class="frame">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="150" fill="#152C3C"/>
+            <rect x="40" y="30" width="120" height="80" rx="4" fill="#0F2230"/>
+            <text x="100" y="75" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" fill="#3E6E8E">10101</text>
+            <path d="M50 120 q50 -20 100 0" stroke="#D9903E" stroke-width="3" fill="none"/>
+          </svg>
+        </div>
+        <figcaption>Tuning flight code</figcaption>
+      </figure>
+      <figure class="snap">
+        <div class="frame">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="150" fill="#EAF0F3"/>
+            <rect y="105" width="200" height="45" fill="#93A2AC"/>
+            <circle cx="150" cy="50" r="28" fill="#D9903E"/>
+            <g transform="translate(80,90)" stroke="#16232E" stroke-width="4" stroke-linecap="round">
+              <line x1="0" y1="0" x2="-18" y2="-14"/><line x1="0" y1="0" x2="18" y2="-14"/>
+              <line x1="0" y1="0" x2="-18" y2="14"/><line x1="0" y1="0" x2="18" y2="14"/>
+            </g>
+          </svg>
+        </div>
+        <figcaption>First test flight</figcaption>
+      </figure>
+      <figure class="snap">
+        <div class="frame">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="150" fill="#DCE3E7"/>
+            <circle cx="70" cy="90" r="20" fill="#2C5A78"/>
+            <circle cx="110" cy="95" r="20" fill="#3E6E8E"/>
+            <circle cx="150" cy="88" r="20" fill="#57666F"/>
+            <rect x="50" y="105" width="120" height="10" rx="4" fill="#16232E"/>
+          </svg>
+        </div>
+        <figcaption>Build night crew</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">// Who's running this thing</div>
+      <h2>The team</h2>
+      <p>Student-led, faculty-backed.</p>
+    </div>
+    <div class="roster">
+      <div class="row"><div class="avatar">D</div><h4>Mr. Daugherty</h4><div class="role">Faculty advisor</div></div>
+      <div class="row"><div class="avatar">LH</div><h4>Luke Hwang</h4><div class="role">Team lead</div></div>
+      <div class="row"><div class="avatar">BE</div><h4>Bram Elia</h4><div class="role">Team lead</div></div>
+      <div class="row"><div class="avatar">KK</div><h4>Kai Kwee-Hallem</h4><div class="role">Team lead</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="join">
+    <div class="wrap">
+      <div>
+        <div class="kicker">// Sign up</div>
+        <h2>Come to a build night</h2>
+        <p>The best way in is to just show up. Bring nothing — we've got tools, spare parts, and someone who can teach you to solder in ten minutes.</p>
+        <a href="mailto:aerialclub@ithacahs.example.org" class="btn btn-fill">Email the club</a>
+      </div>
+      <div class="infocard">
+        <div><span class="k">Meets</span><span>Tue / Thu</span></div>
+        <div><span class="k">Time</span><span>15:30–17:30</span></div>
+        <div><span class="k">Location</span><span>Engineering Lab</span></div>
+        <div><span class="k">Dues</span><span>None</span></div>
+        <div><span class="k">Experience</span><span>Not required</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footgrid">
+    <div>
+      <h5>Ithaca Aerial Robotics</h5>
+      <p>Student-run aerial robotics club at Ithaca High School.</p>
+    </div>
+    <div>
+      <h5>Navigate</h5>
+      <a href="#subteams">Subteams</a>
+      <a href="#builds">Builds</a>
+      <a href="#team">Team</a>
+      <a href="#join">Join</a>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <a href="mailto:aerialclub@ithacahs.example.org">aerialclub@ithacahs.example.org</a>
+      <p>Ithaca High School</p>
+    </div>
+  </div>
+  <div class="wrap footbottom">
+    <div>Advised by Mr. Daugherty</div>
+    <div>&copy; 2026 Ithaca Aerial Robotics</div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('navtoggle');
+  const nav = document.getElementById('mainnav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', false);
+  }));
+</script>
+
+</body>
+</html>
