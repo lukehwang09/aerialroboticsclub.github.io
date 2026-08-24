@@ -1,553 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ithaca Aerial Robotics</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#F5F7F8;
-    --panel:#FFFFFF;
-    --ink:#16232E;
-    --ink-soft:#57666F;
-    --blue:#2C5A78;
-    --blue-deep:#152C3C;
-    --blue-mid:#3E6E8E;
-    --steel:#93A2AC;
-    --steel-light:#DCE3E7;
-    --amber:#D9903E;
-    --line:rgba(22,35,46,0.12);
-    --display:'Archivo', sans-serif;
-    --body:'Inter', sans-serif;
-    --script:'Caveat', cursive;
-    --mono:'IBM Plex Mono', monospace;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.65;-webkit-font-smoothing:antialiased;}
-  a{color:inherit;text-decoration:none;}
-  .wrap{max-width:1140px;margin:0 auto;padding:0 28px;}
-  svg{display:block;}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#071319" />
+  <title>Ithaca Aerial — Flight Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#071319;--ink-2:#0c2029;--paper:#e9ece8;--white:#f9fbf8;--mist:#b8c3c2;--line:rgba(235,246,241,.18);--signal:#ceff43;--orange:#ff6b35;--mono:'DM Mono',monospace;--sans:'Manrope',sans-serif;--display:'Space Grotesk',sans-serif}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);overflow-x:hidden} a{color:inherit;text-decoration:none} img{display:block;width:100%;height:100%;object-fit:cover} button{font:inherit}.shell{width:min(1360px,calc(100% - 48px));margin:auto}.mono{font:500 10px/1.2 var(--mono);letter-spacing:.16em;text-transform:uppercase}.eyebrow{display:flex;gap:10px;align-items:center;color:var(--signal)}.eyebrow::before{content:'';width:20px;height:1px;background:currentColor}.noise{position:absolute;inset:0;pointer-events:none;opacity:.075;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");mix-blend-mode:soft-light;z-index:1}
 
-  header{position:sticky;top:0;z-index:50;background:rgba(245,247,248,0.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
-  header .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;}
-  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:16.5px;letter-spacing:0.01em;}
-  .brand .mark{width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid var(--ink);flex-shrink:0;position:relative;}
-  .brand .mark .sky{position:absolute;top:0;left:0;right:0;height:50%;background:var(--blue);}
-  .brand .mark .ground{position:absolute;bottom:0;left:0;right:0;height:50%;background:var(--steel-light);}
-  nav{display:flex;gap:28px;align-items:center;}
-  nav a.navlink{font-size:14px;font-weight:600;color:var(--ink-soft);transition:color .15s ease;}
-  nav a.navlink:hover, nav a.navlink:focus-visible{color:var(--ink);outline:none;}
-  .navtoggle{display:none;background:none;border:1px solid var(--ink);width:38px;height:38px;border-radius:4px;font-size:18px;cursor:pointer;}
-
-  /* hero — full illustrated scene, asymmetric */
-  .hero{position:relative;min-height:560px;display:flex;align-items:flex-end;overflow:hidden;}
-  .hero-bg{position:absolute;inset:0;z-index:0;}
-  .hero-bg svg{width:100%;height:100%;}
-  .grain{position:absolute;inset:0;opacity:0.05;mix-blend-mode:overlay;pointer-events:none;}
-  .hero-content{position:relative;z-index:2;padding:0 0 56px;width:100%;}
-  .hero-content .wrap{display:block;max-width:640px;margin-left:28px;}
-  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#BFD4E2;margin-bottom:16px;}
-  h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,5vw,54px);line-height:1.06;letter-spacing:-0.01em;color:#fff;}
-  .hero p.lede{margin:18px 0 28px;font-size:16.5px;color:#D9E4EA;max-width:44ch;}
-  .cta-row{display:flex;gap:14px;flex-wrap:wrap;}
-  .btn{font-family:var(--body);font-weight:700;font-size:14.5px;padding:14px 24px;border-radius:4px;display:inline-block;border:1.5px solid transparent;transition:transform .12s ease, background .15s ease, color .15s ease;}
-  .btn:active{transform:scale(0.98);}
-  .btn-fill{background:#fff;color:var(--blue-deep);}
-  .btn-fill:hover{background:var(--amber);color:#fff;}
-  .btn-outline{background:transparent;color:#fff;border-color:rgba(255,255,255,0.55);}
-  .btn-outline:hover{background:rgba(255,255,255,0.12);border-color:#fff;}
-  .btn:focus-visible{outline:3px solid var(--amber);outline-offset:2px;}
-
-  section{padding:80px 0;}
-  .section-head{max-width:620px;margin-bottom:44px;}
-  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;}
-  h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,3.2vw,36px);letter-spacing:-0.005em;}
-  .section-head p{color:var(--ink-soft);margin-top:12px;font-size:16px;max-width:56ch;}
-
-  .stats{background:var(--blue-deep);color:#fff;}
-  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
-  .stat{padding:28px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.14);}
-  .stat:last-child{border-right:none;}
-  .stat .num{font-family:var(--display);font-weight:800;font-size:24px;}
-  .stat .lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#AFC0CC;margin-top:6px;}
-
-  /* subteams with vignette illustration */
-  .subteams{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-  .subteam{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
-  .subteam .vignette{height:120px;background:var(--steel-light);}
-  .subteam .vignette svg{width:100%;height:100%;}
-  .subteam .body{padding:22px 22px 26px;}
-  .subteam .n{font-family:var(--mono);font-size:12px;color:var(--steel);margin-bottom:10px;}
-  .subteam h3{font-family:var(--display);font-weight:700;font-size:18px;margin-bottom:8px;}
-  .subteam p{font-size:14px;color:var(--ink-soft);}
-
-  .quote-strip{background:var(--steel-light);}
-  .quote-strip .wrap{display:flex;align-items:center;gap:24px;}
-  .quote-strip svg{width:52px;height:52px;flex-shrink:0;}
-  .quote-strip p{font-family:var(--script);font-size:24px;color:var(--blue-deep);line-height:1.35;}
-  .quote-strip span{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:6px;text-transform:uppercase;letter-spacing:0.05em;}
-
-  /* builds with illustrated vehicle icon, asymmetric sizing */
-  .builds-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:22px;}
-  .build{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
-  .build .art{height:150px;background:linear-gradient(180deg,#EAF0F3,var(--steel-light));display:flex;align-items:center;justify-content:center;}
-  .build .art svg{width:70%;height:70%;}
-  .build .body{padding:22px 24px 24px;}
-  .pill{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:0.05em;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:14px;}
-  .pill.flying{background:#E3EEE7;color:#2E7D4F;}
-  .pill.testing{background:#F2E4D0;color:var(--amber);}
-  .pill.design{background:#E1E9EF;color:var(--blue);}
-  .build h3{font-family:var(--display);font-weight:700;font-size:19px;margin-bottom:12px;}
-  .build ul{list-style:none;font-size:13px;margin-bottom:12px;}
-  .build ul li{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line);font-family:var(--mono);color:var(--ink-soft);}
-  .build ul li span:last-child{color:var(--ink);}
-  .build p.blurb{font-size:13.5px;color:var(--ink-soft);}
-
-  .horizon-note{margin-top:32px;border-left:3px solid var(--blue);padding:14px 20px;font-size:14.5px;color:var(--ink-soft);background:var(--panel);}
-  .horizon-note strong{color:var(--ink);}
-
-  /* photo-strip gallery — scattered snapshot illustrations */
-  .gallery{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .snapshots{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;padding-top:10px;}
-  .snap{width:190px;background:#fff;padding:10px 10px 18px;box-shadow:0 6px 16px rgba(22,35,46,0.12);}
-  .snap:nth-child(1){transform:rotate(-3deg);}
-  .snap:nth-child(2){transform:rotate(2deg);margin-top:18px;}
-  .snap:nth-child(3){transform:rotate(-1.5deg);}
-  .snap:nth-child(4){transform:rotate(2.5deg);margin-top:10px;}
-  .snap:hover{transform:rotate(0deg);transition:transform .18s ease;}
-  .snap .frame{width:100%;aspect-ratio:4/3;background:var(--steel-light);overflow:hidden;}
-  .snap .frame svg{width:100%;height:100%;}
-  .snap figcaption{font-family:var(--script);font-size:18px;color:var(--ink-soft);text-align:center;margin-top:10px;}
-
-  /* team roster */
-  .roster{border-top:1px solid var(--line);}
-  .row{display:grid;grid-template-columns:56px 1fr 160px;gap:18px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line);}
-  .row .avatar{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:14px;}
-  .row h4{font-size:16px;font-weight:600;}
-  .row .role{font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.04em;text-align:right;}
-
-  /* join — diagonal color block for asymmetry */
-  .join{position:relative;background:var(--blue-deep);color:#fff;clip-path:polygon(0 4%, 100% 0, 100% 96%, 0 100%);margin:20px 0;}
-  .join .wrap{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;padding:90px 28px;}
-  .join p{color:#C9D8E1;margin:16px 0 26px;max-width:44ch;}
-  .join .kicker{color:var(--amber);}
-  .infocard{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:26px;font-family:var(--mono);font-size:13.5px;}
-  .infocard div{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.14);}
-  .infocard div:last-child{border-bottom:none;}
-  .infocard .k{color:#9FB4C0;text-transform:uppercase;letter-spacing:0.05em;font-size:11px;}
-  .join .btn-fill{background:#fff;color:var(--blue-deep);}
-  .join .btn-fill:hover{background:var(--amber);color:#fff;}
-
-  footer{background:var(--ink);color:#9AA7AF;}
-  .footgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding:48px 0 26px;}
-  .footgrid h5{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#6C7A82;margin-bottom:14px;}
-  .footgrid a, .footgrid p{display:block;font-size:14px;margin-bottom:8px;color:#B7C1C7;}
-  .footgrid a:hover{color:#fff;}
-  .footbottom{border-top:1px solid rgba(255,255,255,0.1);padding:18px 0;font-size:12.5px;color:#6C7A82;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-
-  @media (max-width:880px){
-    .hero-content .wrap{margin-left:0;max-width:100%;}
-    .stats .wrap{grid-template-columns:repeat(2,1fr);}
-    .stat{border-bottom:1px solid rgba(255,255,255,0.14);}
-    .subteams{grid-template-columns:1fr;}
-    .builds-grid{grid-template-columns:1fr;}
-    .quote-strip .wrap{flex-direction:column;text-align:center;}
-    .join{clip-path:none;}
-    .join .wrap{grid-template-columns:1fr;padding:56px 24px;}
-    .footgrid{grid-template-columns:1fr;gap:24px;}
-    .row{grid-template-columns:44px 1fr;}
-    .row .role{grid-column:2;text-align:left;margin-top:2px;}
-    nav{display:none;position:absolute;top:68px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);flex-direction:column;padding:10px 28px;gap:14px;}
-    nav.open{display:flex;}
-    .navtoggle{display:block;}
-  }
-</style>
+    .topbar{position:absolute;inset:0 0 auto;z-index:10;color:white;border-bottom:1px solid var(--line)}.topbar .shell{height:84px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:11px;font:700 16px var(--display);letter-spacing:-.04em}.brand-mark{width:29px;height:29px;border:1.5px solid var(--signal);border-radius:50%;position:relative}.brand-mark:before,.brand-mark:after{content:'';position:absolute;left:6px;right:6px;height:1px;background:var(--signal);top:13px}.brand-mark:after{transform:rotate(90deg)}.nav{display:flex;gap:30px;align-items:center;font-size:12px;font-weight:700}.nav a{opacity:.7;transition:opacity .2s}.nav a:hover{opacity:1}.nav .nav-cta{border:1px solid var(--signal);color:var(--signal);padding:10px 15px;opacity:1}.menu{display:none;background:none;color:white;border:0;font-size:23px}
+    .hero{position:relative;min-height:800px;color:white;display:flex;align-items:flex-end;background:var(--ink);isolation:isolate}.hero-photo{position:absolute;inset:0;opacity:.74}.hero-photo:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,15,20,.93) 0%,rgba(3,15,20,.57) 45%,rgba(3,15,20,.08)),linear-gradient(0deg,rgba(3,15,20,.9),transparent 49%)}.hero-photo img{object-position:center}.radar{position:absolute;width:710px;aspect-ratio:1;border-radius:50%;border:1px solid rgba(206,255,67,.35);right:-210px;top:94px;z-index:1;background:repeating-radial-gradient(circle,transparent 0 74px,rgba(206,255,67,.18) 75px 76px)}.radar:before{content:'';position:absolute;inset:50%;background:var(--signal);border-radius:50%;width:5px;height:5px;box-shadow:0 0 20px 9px rgba(206,255,67,.35)}.radar:after{content:'';position:absolute;width:50%;height:50%;top:0;left:0;transform-origin:100% 100%;background:conic-gradient(from 85deg,transparent 0 28deg,rgba(206,255,67,.12) 30deg,transparent 55deg);animation:sweep 8s linear infinite}.hero-inner{position:relative;z-index:3;padding:0 0 78px;width:100%}.hero-grid{display:grid;grid-template-columns:1.35fr .65fr;align-items:end;gap:50px}.hero h1{font:700 clamp(54px,7.7vw,116px)/.91 var(--display);letter-spacing:-.08em;margin:20px 0 27px;max-width:930px}.hero h1 em{font-style:normal;color:var(--signal)}.hero-copy{font-size:15px;line-height:1.8;color:#ccdad6;max-width:470px;margin:0}.hero-meta{border-left:1px solid var(--line);padding-left:25px;display:grid;gap:23px}.hero-meta strong{display:block;font:600 15px var(--display);letter-spacing:-.03em;margin-top:5px}.hero-scroll{position:absolute;right:0;bottom:-45px;width:91px;height:91px;border:1px solid var(--line);background:var(--ink);display:grid;place-items:center;color:var(--signal);z-index:5}.hero-scroll span{font-size:21px;animation:bob 1.8s ease-in-out infinite}
+    .ticker{background:var(--signal);color:var(--ink);overflow:hidden;white-space:nowrap;font:600 10px/42px var(--mono);letter-spacing:.14em;text-transform:uppercase}.ticker-track{display:inline-block;animation:ticker 24s linear infinite}.ticker b{margin:0 28px;color:#537200}
+    section{padding:140px 0}.section-intro{display:grid;grid-template-columns:.72fr 1.28fr;gap:40px;margin-bottom:64px}.section-intro h2{font:700 clamp(35px,5vw,67px)/.96 var(--display);letter-spacing:-.07em;margin:0;max-width:750px}.section-intro p{margin:18px 0 0;color:#4c5b5d;max-width:530px;line-height:1.8;font-size:15px}
+    .mission{background:var(--paper)}.mission-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:60px}.mission-image{height:650px;position:relative;overflow:hidden}.mission-image img{filter:grayscale(1) contrast(1.1);object-position:center}.mission-image:after{content:'FLIGHT TEST / 001';position:absolute;bottom:0;left:0;padding:12px 15px;background:var(--signal);font:500 10px var(--mono);letter-spacing:.1em}.spec-stack{display:grid;align-content:center}.big-word{font:700 clamp(72px,10vw,145px)/.75 var(--display);letter-spacing:-.1em;color:#d0d8d4;margin:25px 0 42px}.manifesto{font:500 clamp(23px,2.6vw,37px)/1.25 var(--display);letter-spacing:-.055em;margin:0 0 38px;max-width:550px}.mission-list{border-top:1px solid #bdc7c4}.mission-list div{display:grid;grid-template-columns:45px 1fr auto;gap:10px;align-items:center;padding:18px 0;border-bottom:1px solid #bdc7c4}.mission-list b{font-size:14px}.mission-list span{color:#697878;font-size:12px}.mission-list i{font:500 10px var(--mono);color:#718000;font-style:normal}
+    .programs{background:var(--ink);color:white;position:relative}.programs .section-intro p{color:#a9bbb7}.programs .eyebrow{color:var(--signal)}.program-grid{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.program{min-height:510px;padding:26px;position:relative;border-right:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}.program-photo{position:absolute;inset:0;opacity:.42;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .4s}.program:before{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#071319 0%,transparent 85%);z-index:1}.program:hover .program-photo{transform:scale(1.07);opacity:.63}.program > *:not(.program-photo){position:relative;z-index:2}.program-num{position:absolute!important;top:26px;left:26px;font:500 10px var(--mono);color:var(--signal)}.program h3{font:600 25px/.95 var(--display);letter-spacing:-.06em;margin:0 0 12px}.program p{color:#c5d4d0;font-size:12px;line-height:1.65;margin:0;max-width:310px}.program-link{display:flex;justify-content:space-between;align-items:center;margin-top:28px;border-top:1px solid var(--line);padding-top:15px;font:500 9px var(--mono);letter-spacing:.1em;color:var(--signal)}
+    .flightlog{padding-bottom:0}.flight-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px}.feature-log{min-height:590px;background:var(--ink);color:white;position:relative;overflow:hidden;padding:34px;display:flex;flex-direction:column;justify-content:flex-end}.feature-log .log-image{position:absolute;inset:0;opacity:.52}.feature-log .log-image:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#071319,transparent 85%)}.feature-log > *:not(.log-image){position:relative;z-index:1}.feature-log h3{font:600 clamp(35px,4vw,56px)/.95 var(--display);letter-spacing:-.07em;max-width:560px;margin:18px 0}.tag{color:var(--signal)}.log-detail{display:flex;gap:30px;color:#c1d3ce;font-size:12px}.log-detail span{border-left:1px solid var(--line);padding-left:14px}.log-detail b{display:block;font:500 9px var(--mono);color:#87a29a;letter-spacing:.1em;margin-bottom:5px}.data-card{background:#d8dedb;padding:33px;display:flex;flex-direction:column}.data-card header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #aeb9b5;padding-bottom:16px}.data-card header span:last-child{color:#688100}.telemetry{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:27px}.telemetry div{padding:18px 0;border-bottom:1px solid #b9c3bf}.telemetry div:nth-child(odd){padding-right:12px}.telemetry div:nth-child(even){padding-left:12px;border-left:1px solid #b9c3bf}.telemetry b{font:600 25px var(--display);letter-spacing:-.06em;display:block}.telemetry span{font:500 9px var(--mono);color:#5b6d69;letter-spacing:.08em}.flight-path{margin-top:auto;height:130px;background-image:linear-gradient(90deg,transparent 0 49%,#b4c0bc 49% 50%,transparent 50%),linear-gradient(#b4c0bc 1px,transparent 1px);background-size:100% 100%,100% 26px;position:relative}.flight-path svg{width:100%;height:100%;overflow:visible}.flight-path path{stroke:var(--orange);stroke-width:3;fill:none;stroke-dasharray:8 7}.flight-path circle{fill:var(--ink)}
+    .gallery{background:#dbe0dd}.gallery-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:42px}.gallery-head h2{font:700 clamp(42px,6vw,78px)/.9 var(--display);letter-spacing:-.08em;margin:14px 0 0}.gallery-head p{font-size:12px;max-width:200px;color:#4c5b5d}.gallery-grid{display:grid;grid-template-columns:1.5fr .8fr .8fr;grid-template-rows:225px 225px;gap:12px}.gallery-item{overflow:hidden;position:relative;background:var(--ink)}.gallery-item:first-child{grid-row:span 2}.gallery-item img{transition:transform .7s}.gallery-item:hover img{transform:scale(1.06)}.gallery-item span{position:absolute;z-index:2;bottom:12px;left:13px;color:white;font:500 9px var(--mono);letter-spacing:.1em;background:rgba(7,19,25,.65);padding:6px 8px}.gallery-item:nth-child(2) img{object-position:center 72%}.gallery-item:nth-child(3) img{object-position:center}.gallery-item:nth-child(4) img{object-position:center 60%}
+    .join{background:var(--orange);color:var(--ink);padding:100px 0;position:relative;overflow:hidden}.join:after{content:'FLY';position:absolute;font:700 39vw/.7 var(--display);letter-spacing:-.14em;color:rgba(255,255,255,.13);right:-20px;bottom:-20px}.join .shell{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr .8fr;gap:50px;align-items:end}.join h2{font:700 clamp(52px,7vw,100px)/.86 var(--display);letter-spacing:-.09em;margin:20px 0 0}.join-copy{border-left:1px solid rgba(7,19,25,.4);padding-left:28px}.join-copy p{font-size:14px;line-height:1.8;max-width:390px;margin:0 0 24px}.button{display:inline-flex;gap:15px;align-items:center;background:var(--ink);color:var(--signal);padding:16px 20px;font:500 11px var(--mono);letter-spacing:.09em;transition:transform .2s}.button:hover{transform:translateY(-3px)}
+    footer{background:var(--ink);color:#c5d2ce;padding:60px 0 24px}.footer-top{display:grid;grid-template-columns:1.5fr repeat(2,.55fr);gap:40px;padding-bottom:55px}.footer-top h3{font:600 20px var(--display);letter-spacing:-.05em;color:white;margin:0 0 13px}.footer-top h4{font:500 10px var(--mono);letter-spacing:.11em;color:#7e9991;margin:0 0 16px}.footer-top a,.footer-top p{display:block;margin:0 0 9px;font-size:12px;color:#c5d2ce}.footer-bottom{border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;font:500 9px var(--mono);color:#849c96;letter-spacing:.08em}
+    [data-reveal]{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.65,.3,1)}[data-reveal].in{opacity:1;transform:none}.program:nth-child(2){transition-delay:.08s}.program:nth-child(3){transition-delay:.16s}.program:nth-child(4){transition-delay:.24s}.program:nth-child(5){transition-delay:.32s}
+    @keyframes sweep{to{transform:rotate(360deg)}}@keyframes ticker{to{transform:translateX(-50%)}}@keyframes bob{50%{transform:translateY(7px)}}
+    @media(max-width:800px){.shell{width:min(100% - 34px,1360px)}.topbar .shell{height:66px}.nav{display:none}.menu{display:block}.hero{min-height:710px}.hero-grid,.mission-layout,.section-intro,.flight-grid,.join .shell{grid-template-columns:1fr;gap:30px}.hero-inner{padding-bottom:48px}.hero-meta{display:none}.hero h1{font-size:58px}.radar{width:470px;right:-285px;top:120px}.hero-scroll{width:60px;height:60px;bottom:-30px}.section-intro{margin-bottom:42px}section{padding:92px 0}.mission-image{height:430px}.big-word{font-size:90px}.program-grid{grid-template-columns:1fr}.program{min-height:380px}.program-num{top:22px;left:23px}.gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:230px 160px 160px}.gallery-item:first-child{grid-column:span 2;grid-row:auto}.gallery-head{display:block}.gallery-head p{margin-top:20px}.footer-top{grid-template-columns:1fr 1fr}.footer-top>div:first-child{grid-column:span 2}.footer-bottom{font-size:8px}.join{padding:80px 0}.join h2{font-size:65px}.join-copy{padding-left:18px}.gallery-item:nth-child(4){display:none}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+    /* Dedicated pages keep the homepage focused. */
+    main > .mission, main > .programs, main > .join{display:none}
+    .gallery-grid{display:flex;grid-template-columns:none;grid-template-rows:none;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;gap:16px;padding:0 0 14px;scrollbar-width:thin;scrollbar-color:#8a9995 transparent;cursor:grab;touch-action:pan-y}
+    .gallery-item,.gallery-item:first-child{flex:0 0 min(68vw,560px);height:430px;grid-column:auto;grid-row:auto;scroll-snap-align:start}.gallery-item:nth-child(4){display:block}
+    .flight-path-overlay{display:none}
+    .gallery-controls{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-top:22px;color:#61716d}.gallery-controls button{width:40px;height:40px;border:1px solid #aebbb7;background:transparent;cursor:pointer;font-size:19px}.gallery-controls button:hover{background:var(--ink);color:var(--signal)}
+  </style>
 </head>
 <body>
-
-<header>
-  <div class="wrap">
-    <a href="#top" class="brand"><span class="mark"><span class="sky"></span><span class="ground"></span></span>Ithaca Aerial</a>
-    <nav id="mainnav">
-      <a class="navlink" href="#subteams">Subteams</a>
-      <a class="navlink" href="#builds">Builds</a>
-      <a class="navlink" href="#team">Team</a>
-      <a class="navlink" href="#join">Join</a>
-    </nav>
-    <button class="navtoggle" id="navtoggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-  </div>
-</header>
-
-<section class="hero" id="top">
-  <div class="hero-bg" aria-hidden="true">
-    <svg viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#0F2230"/>
-          <stop offset="1" stop-color="#3E6E8E"/>
-        </linearGradient>
-        <filter id="grainF"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter>
-      </defs>
-      <rect width="1400" height="700" fill="url(#sky)"/>
-      <circle cx="1230" cy="120" r="70" fill="#D9903E" opacity="0.85"/>
-      <g opacity="0.5" fill="none" stroke="#EAF0F3" stroke-width="4" stroke-linecap="round">
-        <path d="M120 90 l16 -10 l16 10"/>
-        <path d="M300 150 l14 -9 l14 9"/>
-        <path d="M980 70 l14 -9 l14 9"/>
-      </g>
-      <path d="M0 560 L120 500 L260 545 L420 470 L600 530 L760 480 L950 540 L1120 490 L1280 530 L1400 500 L1400 700 L0 700 Z" fill="#152C3C"/>
-      <rect x="640" y="400" width="90" height="140" fill="#1B3648"/>
-      <rect x="655" y="420" width="18" height="18" fill="#3E6E8E"/>
-      <rect x="685" y="420" width="18" height="18" fill="#3E6E8E"/>
-      <rect x="655" y="450" width="18" height="18" fill="#3E6E8E"/>
-      <rect x="685" y="450" width="18" height="18" fill="#3E6E8E"/>
-      <polygon points="635,400 685,365 735,400" fill="#0F2230"/>
-      <g transform="translate(430,260)">
-        <g stroke="#EAF0F3" stroke-width="5" stroke-linecap="round">
-          <line x1="0" y1="0" x2="-46" y2="-34"/>
-          <line x1="0" y1="0" x2="46" y2="-34"/>
-          <line x1="0" y1="0" x2="-46" y2="34"/>
-          <line x1="0" y1="0" x2="46" y2="34"/>
-        </g>
-        <g fill="none" stroke="#EAF0F3" stroke-width="4">
-          <circle cx="-46" cy="-34" r="15"/>
-          <circle cx="46" cy="-34" r="15"/>
-          <circle cx="-46" cy="34" r="15"/>
-          <circle cx="46" cy="34" r="15"/>
-        </g>
-        <rect x="-13" y="-13" width="26" height="26" rx="3" fill="#D9903E"/>
-        <g opacity="0.5" stroke="#EAF0F3" stroke-width="2">
-          <line x1="-90" y1="-34" x2="-64" y2="-34"/>
-          <line x1="90" y1="-34" x2="64" y2="-34"/>
-        </g>
-      </g>
-      <rect width="1400" height="700" filter="url(#grainF)" opacity="0.04"/>
-    </svg>
-  </div>
-  <div class="hero-content">
-    <div class="wrap">
-      <div class="eyebrow">Ithaca High School · Student-run</div>
-      <h1>We build things. Then we make them fly.</h1>
-      <p class="lede">Quadcopters, FPV racers, fixed-wing planes — if it's got a motor and a chance of crashing, someone here is probably building it. No experience needed, just curiosity.</p>
-      <div class="cta-row">
-        <a href="#join" class="btn btn-fill">Come to a meeting</a>
-        <a href="#builds" class="btn btn-outline">See what we're building</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="stats">
-  <div class="wrap">
-    <div class="stat"><div class="num">Est. 2025</div><div class="lbl">Founded</div></div>
-    <div class="stat"><div class="num">3</div><div class="lbl">Active builds</div></div>
-    <div class="stat"><div class="num">3</div><div class="lbl">Team leads</div></div>
-    <div class="stat"><div class="num">Mr. Daugherty</div><div class="lbl">Faculty advisor</div></div>
-  </div>
-</section>
-
-<section id="subteams">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">// How the club is organized</div>
-      <h2>Three ways to get involved</h2>
-      <p>Every build needs all three — most members end up trying each of them by second semester.</p>
-    </div>
-    <div class="subteams">
-      <div class="subteam">
-        <div class="vignette">
-          <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
-            <rect width="300" height="150" fill="#DCE3E7"/>
-            <rect x="40" y="50" width="120" height="14" rx="4" fill="#93A2AC"/>
-            <circle cx="60" cy="57" r="9" fill="#57666F"/>
-            <line x1="160" y1="30" x2="220" y2="110" stroke="#16232E" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="222" cy="114" r="7" fill="#D9903E"/>
-            <circle cx="100" cy="95" r="18" fill="none" stroke="#2C5A78" stroke-width="4"/>
-          </svg>
-        </div>
-        <div class="body">
-          <div class="n">01</div>
-          <h3>Airframe</h3>
-          <p>CAD, 3D-printed mounts, frame assembly, and repairs. Hands-on work with real tools from day one.</p>
-        </div>
-      </div>
-      <div class="subteam">
-        <div class="vignette">
-          <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
-            <rect width="300" height="150" fill="#DCE3E7"/>
-            <rect x="70" y="35" width="160" height="90" rx="6" fill="#152C3C"/>
-            <g fill="#3E6E8E">
-              <circle cx="100" cy="60" r="5"/><circle cx="120" cy="60" r="5"/><circle cx="140" cy="60" r="5"/>
-              <circle cx="100" cy="80" r="5"/><circle cx="140" cy="80" r="5"/>
-              <circle cx="180" cy="70" r="10"/>
-            </g>
-            <path d="M100 100 h100" stroke="#D9903E" stroke-width="3"/>
-            <text x="150" y="115" text-anchor="middle" font-family="IBM Plex Mono" font-size="14" fill="#EAF0F3">&lt;/&gt;</text>
-          </svg>
-        </div>
-        <div class="body">
-          <div class="n">02</div>
-          <h3>Electronics &amp; software</h3>
-          <p>Wiring, flight controller setup, and the code behind autonomous missions. Python and a bit of C++.</p>
-        </div>
-      </div>
-      <div class="subteam">
-        <div class="vignette">
-          <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
-            <rect width="300" height="150" fill="#DCE3E7"/>
-            <rect x="60" y="30" width="70" height="95" rx="4" fill="#fff" stroke="#16232E" stroke-width="3"/>
-            <rect x="80" y="24" width="30" height="12" rx="3" fill="#93A2AC"/>
-            <line x1="72" y1="55" x2="118" y2="55" stroke="#2E7D4F" stroke-width="3"/>
-            <line x1="72" y1="70" x2="110" y2="70" stroke="#93A2AC" stroke-width="3"/>
-            <path d="M75 45 l6 6 l10 -12" stroke="#2E7D4F" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <g transform="translate(200,80)">
-              <line x1="0" y1="0" x2="-24" y2="-18" stroke="#16232E" stroke-width="4" stroke-linecap="round"/>
-              <line x1="0" y1="0" x2="24" y2="-18" stroke="#16232E" stroke-width="4" stroke-linecap="round"/>
-              <circle cx="-24" cy="-18" r="8" fill="none" stroke="#16232E" stroke-width="3"/>
-              <circle cx="24" cy="-18" r="8" fill="none" stroke="#16232E" stroke-width="3"/>
-            </g>
-          </svg>
-        </div>
-        <div class="body">
-          <div class="n">03</div>
-          <h3>Test &amp; ops</h3>
-          <p>Flight testing, safety checks, and getting a build competition-ready. You keep the team honest about what's airworthy.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="quote-strip">
-  <div class="wrap">
-    <svg viewBox="0 0 48 48" fill="none"><path d="M6 30c0-10 6-16 14-18l2 4c-6 2-9 6-9 11h9v14H6V30z" fill="#2C5A78"/><path d="M26 30c0-10 6-16 14-18l2 4c-6 2-9 6-9 11h9v14H26V30z" fill="#2C5A78"/></svg>
-    <div>
-      <p>"I couldn't solder in September. By December I'd built half a flight controller wiring harness myself."</p>
-      <span>— a sophomore member</span>
-    </div>
-  </div>
-</section>
-
-<section id="builds">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">// On the bench right now</div>
-      <h2>Current builds</h2>
-      <p>Three airframes in rotation this semester, each at a different stage.</p>
-    </div>
-    <div class="builds-grid">
-      <div class="build">
-        <div class="art">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <g stroke="#2C5A78" stroke-width="7" stroke-linecap="round">
-              <line x1="100" y1="100" x2="40" y2="40"/><line x1="100" y1="100" x2="160" y2="40"/>
-              <line x1="100" y1="100" x2="40" y2="160"/><line x1="100" y1="100" x2="160" y2="160"/>
-            </g>
-            <g fill="none" stroke="#152C3C" stroke-width="6">
-              <circle cx="40" cy="40" r="24"/><circle cx="160" cy="40" r="24"/>
-              <circle cx="40" cy="160" r="24"/><circle cx="160" cy="160" r="24"/>
-            </g>
-            <rect x="82" y="82" width="36" height="36" rx="5" fill="#16232E"/>
-            <rect x="90" y="95" width="20" height="12" fill="#D9903E"/>
-          </svg>
-        </div>
-        <div class="body">
-          <span class="pill flying">Flying</span>
-          <h3>Survey quad</h3>
-          <ul>
-            <li><span>Frame</span><span>420mm quad</span></li>
-            <li><span>Payload</span><span>Multispectral cam</span></li>
-            <li><span>Flight time</span><span>~22 min</span></li>
-          </ul>
-          <p class="blurb">Autonomous grid-survey platform, originally built to support a member's independent research project.</p>
-        </div>
-      </div>
-      <div class="build">
-        <div class="art">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <g stroke="#D9903E" stroke-width="6" stroke-linecap="round">
-              <line x1="100" y1="110" x2="55" y2="60"/><line x1="100" y1="110" x2="145" y2="60"/>
-              <line x1="100" y1="110" x2="55" y2="160"/><line x1="100" y1="110" x2="145" y2="160"/>
-            </g>
-            <g fill="none" stroke="#16232E" stroke-width="5">
-              <circle cx="55" cy="60" r="18"/><circle cx="145" cy="60" r="18"/>
-              <circle cx="55" cy="160" r="18"/><circle cx="145" cy="160" r="18"/>
-            </g>
-            <rect x="88" y="98" width="24" height="24" rx="4" fill="#16232E"/>
-            <path d="M20 175 L60 155 M25 185 L70 162" stroke="#93A2AC" stroke-width="3" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="body">
-          <span class="pill testing">Testing</span>
-          <h3>FPV racer</h3>
-          <ul>
-            <li><span>Frame</span><span>5-inch racer</span></li>
-            <li><span>Motors</span><span>2306 / 1900kv</span></li>
-            <li><span>Top speed</span><span>~78 mph</span></li>
-          </ul>
-          <p class="blurb">Tuning PID rates this month after a hard landing took out a motor mount.</p>
-        </div>
-      </div>
-      <div class="build">
-        <div class="art">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 110 Q100 70 180 110 Q100 130 20 110 Z" fill="#3E6E8E" stroke="#16232E" stroke-width="4"/>
-            <rect x="92" y="100" width="16" height="40" fill="#16232E"/>
-            <path d="M92 140 l-14 24 M108 140 l14 24" stroke="#16232E" stroke-width="5" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="body">
-          <span class="pill design">Design</span>
-          <h3>Fixed-wing, long-range</h3>
-          <ul>
-            <li><span>Frame</span><span>1.5m flying wing</span></li>
-            <li><span>Target range</span><span>15+ km</span></li>
-            <li><span>Status</span><span>CAD phase</span></li>
-          </ul>
-          <p class="blurb">A long-endurance airframe we're prototyping ahead of next year's goals.</p>
-        </div>
-      </div>
-    </div>
-    <div class="horizon-note"><strong>On the horizon:</strong> we're working toward fielding a team for a national UAS competition in 2027 — nothing official yet, but it's shaping a lot of what we're building this year.</div>
-  </div>
-</section>
-
-<section class="gallery">
-  <div class="wrap">
-    <div class="section-head" style="margin-bottom:8px;">
-      <div class="kicker">// From build nights</div>
-      <h2>A few snapshots</h2>
-    </div>
-    <div class="snapshots">
-      <figure class="snap">
-        <div class="frame">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-            <rect width="200" height="150" fill="#EAF0F3"/>
-            <rect x="30" y="60" width="90" height="16" rx="4" fill="#93A2AC"/>
-            <line x1="130" y1="50" x2="170" y2="95" stroke="#16232E" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="172" cy="98" r="7" fill="#D9903E"/>
-            <circle cx="70" cy="100" r="14" fill="none" stroke="#2C5A78" stroke-width="4"/>
-          </svg>
-        </div>
-        <figcaption>Late-night solder session</figcaption>
-      </figure>
-      <figure class="snap">
-        <div class="frame">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-            <rect width="200" height="150" fill="#152C3C"/>
-            <rect x="40" y="30" width="120" height="80" rx="4" fill="#0F2230"/>
-            <text x="100" y="75" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" fill="#3E6E8E">10101</text>
-            <path d="M50 120 q50 -20 100 0" stroke="#D9903E" stroke-width="3" fill="none"/>
-          </svg>
-        </div>
-        <figcaption>Tuning flight code</figcaption>
-      </figure>
-      <figure class="snap">
-        <div class="frame">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-            <rect width="200" height="150" fill="#EAF0F3"/>
-            <rect y="105" width="200" height="45" fill="#93A2AC"/>
-            <circle cx="150" cy="50" r="28" fill="#D9903E"/>
-            <g transform="translate(80,90)" stroke="#16232E" stroke-width="4" stroke-linecap="round">
-              <line x1="0" y1="0" x2="-18" y2="-14"/><line x1="0" y1="0" x2="18" y2="-14"/>
-              <line x1="0" y1="0" x2="-18" y2="14"/><line x1="0" y1="0" x2="18" y2="14"/>
-            </g>
-          </svg>
-        </div>
-        <figcaption>First test flight</figcaption>
-      </figure>
-      <figure class="snap">
-        <div class="frame">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-            <rect width="200" height="150" fill="#DCE3E7"/>
-            <circle cx="70" cy="90" r="20" fill="#2C5A78"/>
-            <circle cx="110" cy="95" r="20" fill="#3E6E8E"/>
-            <circle cx="150" cy="88" r="20" fill="#57666F"/>
-            <rect x="50" y="105" width="120" height="10" rx="4" fill="#16232E"/>
-          </svg>
-        </div>
-        <figcaption>Build night crew</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<section id="team">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">// Who's running this thing</div>
-      <h2>The team</h2>
-      <p>Student-led, faculty-backed.</p>
-    </div>
-    <div class="roster">
-      <div class="row"><div class="avatar">D</div><h4>Mr. Daugherty</h4><div class="role">Faculty advisor</div></div>
-      <div class="row"><div class="avatar">LH</div><h4>Luke Hwang</h4><div class="role">Team lead</div></div>
-      <div class="row"><div class="avatar">BE</div><h4>Bram Elia</h4><div class="role">Team lead</div></div>
-      <div class="row"><div class="avatar">KK</div><h4>Kai Kwee-Hallem</h4><div class="role">Team lead</div></div>
-    </div>
-  </div>
-</section>
-
-<section id="join">
-  <div class="join">
-    <div class="wrap">
-      <div>
-        <div class="kicker">// Sign up</div>
-        <h2>Come to a build night</h2>
-        <p>The best way in is to just show up. Bring nothing — we've got tools, spare parts, and someone who can teach you to solder in ten minutes.</p>
-        <a href="mailto:aerialclub@ithacahs.example.org" class="btn btn-fill">Email the club</a>
-      </div>
-      <div class="infocard">
-        <div><span class="k">Meets</span><span>Tue / Thu</span></div>
-        <div><span class="k">Time</span><span>15:30–17:30</span></div>
-        <div><span class="k">Location</span><span>Engineering Lab</span></div>
-        <div><span class="k">Dues</span><span>None</span></div>
-        <div><span class="k">Experience</span><span>Not required</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap footgrid">
-    <div>
-      <h5>Ithaca Aerial Robotics</h5>
-      <p>Student-run aerial robotics club at Ithaca High School.</p>
-    </div>
-    <div>
-      <h5>Navigate</h5>
-      <a href="#subteams">Subteams</a>
-      <a href="#builds">Builds</a>
-      <a href="#team">Team</a>
-      <a href="#join">Join</a>
-    </div>
-    <div>
-      <h5>Contact</h5>
-      <a href="mailto:aerialclub@ithacahs.example.org">aerialclub@ithacahs.example.org</a>
-      <p>Ithaca High School</p>
-    </div>
-  </div>
-  <div class="wrap footbottom">
-    <div>Advised by Mr. Daugherty</div>
-    <div>&copy; 2026 Ithaca Aerial Robotics</div>
-  </div>
-</footer>
-
-<script>
-  const toggle = document.getElementById('navtoggle');
-  const nav = document.getElementById('mainnav');
-  toggle.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', open);
-  });
-  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    nav.classList.remove('open');
-    toggle.setAttribute('aria-expanded', false);
-  }));
-</script>
-
+  <header class="topbar"><div class="shell"><a class="brand" href="#top"><span class="brand-mark"></span><span>Ithaca Aerial</span></a><nav class="nav"><a href="mission.html">Mission</a><a href="subteams.html">Subteams</a><a href="projects.html">Projects</a><a href="suas.html">SUAS</a><a href="outreach.html">Outreach</a><a href="join.html" class="nav-cta">Join the crew ↗</a></nav><button class="menu" aria-label="Toggle navigation" aria-expanded="false">☰</button></div></header>
+  <main>
+    <section class="hero" id="top"><div class="hero-photo"><img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=2000&q=90" alt="Aircraft flying above a forested landscape"></div><div class="radar" aria-hidden="true"></div><div class="noise"></div><div class="shell hero-inner"><div class="hero-grid"><div><div class="eyebrow mono">Ithaca High School · Student-run</div><h1>Built for the <em>unknown.</em><br>Tested in the real world.</h1><p class="hero-copy">We design, 3D print, and fly fixed-wing UAVs—then turn what we learn into the next mission.</p></div><aside class="hero-meta"><div><span class="mono">01 / Current mission</span><strong>3D-printable fixed-wing UAV</strong></div><div><span class="mono">02 / Build sessions</span><strong>Thursday 3:45–5 PM · Saturday 9 AM–12 PM</strong></div><div><span class="mono">03 / Next up</span><strong>SUAS 2027 preparation this fall</strong></div></aside></div></div><a class="hero-scroll" href="#mission" aria-label="Scroll to mission"><span>↓</span></a></section>
+    <div class="ticker"><div class="ticker-track">Airframe <b>✦</b> Autonomy <b>✦</b> Electronics <b>✦</b> Flight operations <b>✦</b> Field testing <b>✦</b> Airframe <b>✦</b> Autonomy <b>✦</b> Electronics <b>✦</b> Flight operations <b>✦</b> Field testing <b>✦</b></div></div>
+    <section class="mission" id="mission"><div class="shell mission-layout"><div class="mission-image" data-reveal><img src="https://images.unsplash.com/photo-1506947411487-a56738267384?auto=format&fit=crop&w=1100&q=85" alt="Aerial view of a rugged landscape"></div><div class="spec-stack" data-reveal><div class="eyebrow mono" style="color:#718000">Our north star</div><div class="big-word">WHY</div><p class="manifesto">The best learning happens when a plane leaves the printer, survives the field, and comes back ready for another iteration.</p><div class="mission-list"><div><span class="mono">01</span><b>Design aircraft that teach us something</b><i>Build</i></div><div><span class="mono">02</span><b>Prepare for SUAS 2027</b><i>Compete</i></div><div><span class="mono">03</span><b>Bring UAV engineering to middle schools</b><i>Share</i></div></div></div></div></section>
+    <section class="programs" id="programs"><div class="noise"></div><div class="shell"><div class="section-intro"><div><div class="eyebrow mono">How we work</div></div><div><h2>Five teams.<br>One flight line.</h2><p>Every fixed-wing mission brings together design, systems, code, field discipline, and a lot of careful testing.</p></div></div><div class="program-grid"><article class="program" data-reveal><div class="program-photo"><img src="https://images.unsplash.com/photo-1581092160607-ee22731a4e89?auto=format&fit=crop&w=900&q=85" alt="Hands working on engineering hardware"></div><span class="program-num">01 / STRUCTURE</span><h3>Airframe &amp;<br>structures</h3><p>CAD, 3D-printable airframes, structure design, assembly, and repairs.</p><a href="#join" class="program-link">Build with us <span>↗</span></a></article><article class="program" data-reveal><div class="program-photo"><img src="https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=900&q=85" alt="Electronic circuit board"></div><span class="program-num">02 / POWER</span><h3>Electrical<br>systems</h3><p>Power distribution, motors, sensors, wiring, and the systems that make flight possible.</p><a href="#join" class="program-link">Wire with us <span>↗</span></a></article><article class="program" data-reveal><div class="program-photo"><img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=900&q=85" alt="Laptop with code"></div><span class="program-num">03 / CODE</span><h3>Programming</h3><p>Flight software, autonomy, mission tools, and the logic behind a capable UAV.</p><a href="#join" class="program-link">Code with us <span>↗</span></a></article><article class="program" data-reveal><div class="program-photo"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85" alt="Open field at golden hour"></div><span class="program-num">04 / VERIFY</span><h3>Integration &amp;<br>testing</h3><p>Bring every subsystem together, validate the details, and learn from every flight.</p><a href="#join" class="program-link">Test with us <span>↗</span></a></article><article class="program" data-reveal><div class="program-photo"><img src="https://images.unsplash.com/photo-1552152370-fb05f0ff36f7?auto=format&fit=crop&w=900&q=85" alt="Open field under a dramatic sky"></div><span class="program-num">05 / FIELD</span><h3>Operations</h3><p>Flight planning, safety, logistics, outreach, and a flight line the whole team can trust.</p><a href="#join" class="program-link">Fly with us <span>↗</span></a></article></div></div></section>
+    <section class="gallery"><div class="shell"><div class="gallery-head"><div><div class="eyebrow mono" style="color:#718000">The in-between moments</div><h2>Field notes.</h2></div><p>Less polished than a launch video. More useful than a highlight reel.</p></div><div class="gallery-grid"><figure class="gallery-item" data-reveal><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1300&q=85" alt="Drone and landscape from above"><span>01 / Seeing the mission</span></figure><figure class="gallery-item" data-reveal><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=85" alt="Detailed electronics"><span>02 / Bench work</span></figure><figure class="gallery-item" data-reveal><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=700&q=85" alt="Landscape during the golden hour"><span>03 / Test day</span></figure><figure class="gallery-item" data-reveal><img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=700&q=85" alt="Laptop with engineering code"><span>04 / Debugging</span></figure><figure class="gallery-item" data-reveal><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=700&q=85" alt="Architectural structure"><span>05 / New ideas</span></figure></div></div></section>
+    <section class="join" id="join"><div class="shell"><div><div class="eyebrow mono" style="color:#071319">Your first build starts here</div><h2>Come<br>make a<br>mess.</h2></div><div class="join-copy"><p>You do not need flight hours, a coding background, or your own gear. Bring curiosity; we will supply the tools, spare parts, and someone to show you what goes where.</p><a class="button" href="mailto:aerialclub@ithacahs.example.org">Email the club <span>↗</span></a></div></div></section>
+  </main>
+  <footer><div class="shell"><div class="footer-top"><div><h3>Ithaca Aerial</h3><p>Student-run fixed-wing UAV and aerial robotics at Ithaca High School.</p></div><div><h4>Explore</h4><a href="mission.html">Mission</a><a href="subteams.html">Subteams</a><a href="projects.html">Projects</a><a href="outreach.html">Outreach</a></div><div><h4>Meet us</h4><p>Thursday · 3:45–5 PM</p><p>Saturday · 9 AM–12 PM</p><a href="mailto:aerialclub@ithacahs.example.org">aerialclub@ithacahs.example.org</a></div></div><div class="footer-bottom"><span>© 2026 Ithaca Aerial Robotics</span><span>Designed for lift, not autopilot.</span></div></div></footer>
+  <script>
+    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in');observer.unobserve(entry.target)}}),{threshold:.14});document.querySelectorAll('[data-reveal]').forEach(el=>observer.observe(el));
+    const menu=document.querySelector('.menu'),nav=document.querySelector('.nav');menu.addEventListener('click',()=>{nav.style.display=nav.style.display==='flex'?'none':'flex';nav.style.cssText+=';position:absolute;top:66px;right:17px;flex-direction:column;align-items:flex-end;background:#071319;padding:20px;gap:18px;border:1px solid rgba(255,255,255,.18)'});
+    document.querySelector('.hero-scroll').href='projects.html';
+    const overlay=document.createElement('div');overlay.className='flight-path-overlay';overlay.innerHTML='<div class="flight-readout">MISSION / <b>001</b><br>ALT / <b>120 FT</b><br>LINK / <b>LOCKED</b></div>';document.querySelector('.hero').append(overlay);
+    const gallery=document.querySelector('.gallery-grid');
+    const controls=document.createElement('div'); controls.className='gallery-controls';
+    controls.innerHTML='<button aria-label="Previous field note">←</button><span class="mono">Drag / scroll to explore</span><button aria-label="Next field note">→</button>';
+    gallery.after(controls);
+    controls.querySelector('button:first-child').onclick=()=>gallery.scrollBy({left:-gallery.clientWidth*.82,behavior:'smooth'});
+    controls.querySelector('button:last-child').onclick=()=>gallery.scrollBy({left:gallery.clientWidth*.82,behavior:'smooth'});
+    let dragStart=0,scrollStart=0,dragging=false;
+    gallery.addEventListener('pointerdown',e=>{dragging=true;dragStart=e.clientX;scrollStart=gallery.scrollLeft;gallery.setPointerCapture(e.pointerId);gallery.style.cursor='grabbing'});
+    gallery.addEventListener('pointermove',e=>{if(!dragging)return;gallery.scrollLeft=scrollStart-(e.clientX-dragStart)});
+    ['pointerup','pointercancel','pointerleave'].forEach(type=>gallery.addEventListener(type,()=>{dragging=false;gallery.style.cursor='grab'}));
+  </script>
 </body>
 </html>
